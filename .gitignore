@@ -1,0 +1,27 @@
+# Lean / Lake build artifacts
+.lake/
+build/
+*.olean
+*.ilean
+*.c
+*.o
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs and local notes (optional)
+*.log
+
+# Node artifacts (some mathlib deps may use npm tooling)
+node_modules/
+
+# Private keys / credentials (defense-in-depth)
+*.pem
+*.key
+*.crt
+*.p12
+.env

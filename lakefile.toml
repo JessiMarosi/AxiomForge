@@ -1,0 +1,15 @@
+name = "mini_prover"
+version = "0.1.0"
+defaultTargets = ["mini_prover"]
+
+[[lean_lib]]
+name = "MiniProver"
+
+[[lean_exe]]
+name = "mini_prover"
+root = "Main"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "master"
