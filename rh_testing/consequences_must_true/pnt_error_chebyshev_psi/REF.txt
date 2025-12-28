@@ -1,0 +1,5 @@
+Canonical test record:
+rh_testing/tested/pnt_error_chebyshev_psi/
+
+Interpretation for this bucket:
+Consequence test (one direction): RH ⇒ ψ(x) = x + O(√x · log^2 x).

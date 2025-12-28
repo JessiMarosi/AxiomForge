@@ -1,0 +1,28 @@
+Claim:
+RH ⇒ Chebyshev psi error term
+ψ(x) = x + O(√x · log^2 x)
+
+Status:
+FAILED
+
+Failure Type:
+Analytic boundary (not formal / not logical)
+
+Failure Point:
+MiniProver.Workbench.Analytic.toNormalForm
+
+Reason:
+Reduction RH → ψ(x) error bound verified structurally via Lean obligation skeleton.
+Failure occurs at analytic layer: explicit formula bridge, zero-sum bounds under Re(ρ)=1/2,
+and remainder control (obligations C3–C5) require analytic normal form machinery
+not yet implemented in Axiom Forge.
+
+Evidence:
+dashboard_artifact.txt
+
+Date Registered:
+2025-12-28
+
+Notes:
+- This is a consequence test only (not an equivalence entry).
+- ψ(x) denotes the Chebyshev function ψ(x) = ∑_{n ≤ x} Λ(n).

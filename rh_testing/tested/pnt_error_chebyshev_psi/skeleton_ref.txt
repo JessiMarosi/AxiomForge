@@ -1,0 +1,6 @@
+User-mode skeleton:
+rh_testing/skeletons/User_RH_Consequence_PNT_Psi.lean
+
+Description:
+Encodes the consequence-style reduction RH ⇒ ψ(x) = x + O(√x · log^2 x)
+as an explicit obligation checklist (C1–C6).
