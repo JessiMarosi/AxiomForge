@@ -1,0 +1,21 @@
+{
+  "generated_date": "2025-12-28",
+  "policy": "deterministic, auditable, no speculation",
+  "counts": {
+    "tested": 1,
+    "failed": 1,
+    "passed": 0
+  },
+  "entries": [
+    {
+      "id": "mertens_equivalence",
+      "claim": "RH ⇔ Mertens / Möbius bound (M(x) = O(x^{1/2+η}) for all η > 0)",
+      "status": "FAILED",
+      "failure_type": "Analytic infrastructure boundary",
+      "failure_point": "MiniProver.Workbench.Analytic.toNormalForm",
+      "reason": "Analytic normal form not implemented (Phase 24 scaffold only).",
+      "evidence": "projects/rh_testing/tested/mertens_equivalence/dashboard_artifact.txt",
+      "skeleton": "projects/rh_demo/User_RH_MertensSkeleton.lean"
+    }
+  ]
+}

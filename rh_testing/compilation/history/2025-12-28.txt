@@ -1,0 +1,18 @@
+AXIOM FORGE — RH TESTING COMPILATION SUMMARY
+Generated: 2025-12-28
+Policy: deterministic, auditable, no speculation
+
+Counts:
+- TESTED: 1
+- FAILED: 1
+- PASSED: 0
+
+Entries (canonical):
+1) mertens_equivalence
+   Claim: RH ⇔ Mertens / Möbius bound (M(x) = O(x^{1/2+η}) for all η > 0)
+   Status: FAILED
+   Failure Type: Analytic infrastructure boundary
+   Failure Point: MiniProver.Workbench.Analytic.toNormalForm
+   Reason: Analytic normal form not implemented (Phase 24 scaffold only).
+   Evidence: projects/rh_testing/tested/mertens_equivalence/dashboard_artifact.txt
+   Skeleton: projects/rh_demo/User_RH_MertensSkeleton.lean

@@ -1,0 +1,24 @@
+Claim:
+RH ⇔ Mertens / Möbius bound
+(M(x) = ∑_{n≤x} μ(n) satisfies M(x) = O(x^{1/2+η}) for all η > 0)
+
+Status:
+FAILED
+
+Failure Type:
+Analytic infrastructure boundary
+
+Failure Point:
+MiniProver.Workbench.Analytic.toNormalForm
+
+Reason:
+Analytic normal form not implemented (Phase 24 scaffold only).
+
+Date Tested:
+2025-12-28
+
+Notes:
+- Reduction skeleton encoded in user-mode.
+- Obligations surfaced deterministically.
+- Dashboard execution reached analytic layer and failed honestly.
+- No mathematical contradiction asserted.

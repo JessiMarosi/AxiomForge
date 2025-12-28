@@ -1,0 +1,14 @@
+ReductionStep: identity
+validate: OK
+
+compile: OK
+
+Assumptions:
+(no assumptions)
+
+Obligations:
+(no obligations)
+
+analytic: ERROR
+
+Failure[internalInvariant]: Analytic normal form not implemented (Phase 24 scaffold only). (context: MiniProver.Workbench.Analytic.toNormalForm)

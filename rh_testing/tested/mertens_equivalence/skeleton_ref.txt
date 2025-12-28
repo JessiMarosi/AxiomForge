@@ -1,0 +1,6 @@
+User-mode skeleton:
+projects/rh_demo/User_RH_MertensSkeleton.lean
+
+Description:
+Encodes RH ⇔ Mertens bound equivalence as a reduction skeleton
+with explicit analytic obligations (A1–A4, B1–B3).
