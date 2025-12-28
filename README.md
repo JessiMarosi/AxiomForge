@@ -1,9 +1,10 @@
 # Axiom Forge
 
-Axiom Forge is a deterministic, auditable Lean 4 + mathlib–based formal reasoning instrument.
+Axiom Forge is a deterministic, auditable Lean 4 + mathlib–based formal reasoning instrument.  
 It is not an oracle, solver, conjecture generator, or AI mathematician.
 
 Its role is to:
+
 - enforce formal correctness
 - expose hidden assumptions
 - normalize equivalent formulations
@@ -13,12 +14,14 @@ Its role is to:
 
 ## What this is / what this is not
 
-Axiom Forge is:
+### Axiom Forge is:
+
 - a policy-governed, deterministic proof and verification instrument built on Lean 4 and mathlib
 - a toolchain that makes dependencies and assumptions explicit
 - a framework for producing auditable artifacts (contracts, negative tests, skeleton obligations)
 
-Axiom Forge is not:
+### Axiom Forge is not:
+
 - a theorem-proving oracle
 - a proof-search engine, conjecture generator, or heuristic system
 - a substitute for mathematical insight
@@ -27,8 +30,9 @@ Axiom Forge is not:
 ## Operating rules (enforced)
 
 These rules govern development and are reflected in the repository structure and tests:
+
 - one step at a time
-- every action specifies: Where · Why · How · What to expect · If it fails
+- every action specifies: **Where · Why · How · What to expect · If it fails**
 - no speculative additions
 - new ideas must strengthen the current claim or be deferred
 - determinism and auditability override speed
@@ -38,7 +42,8 @@ These rules govern development and are reflected in the repository structure and
 ## Privacy rule (strict)
 
 Only files inside the repository are tracked. In particular:
-- projects/ is ignored by git
+
+- `projects/` is ignored by git
 - no personal files
 - no external data
 - no network access required for operation
@@ -46,6 +51,7 @@ Only files inside the repository are tracked. In particular:
 
 ## Repository layout (high-level)
 
+```text
 MiniProver/
   Core/        -- foundational logic (LOCKED)
   Library/     -- internal lemma layer (LOCKED)
@@ -62,46 +68,3 @@ scripts/
 
 projects/               -- user projects (ignored by git)
 NOTES.md                -- authoritative phase log
-
-Strict layering (enforced):
-- Workbench → Library → mathlib
-- Tests → Workbench / Library
-- Never: Workbench → Tests
-- Never: downstream import of MiniProver.Library.*
-
-## Prerequisites
-
-- Lean 4 toolchain (via elan)
-- Lake (ships with Lean)
-- A working mathlib toolchain per lakefile.toml
-
-For PDF reports:
-- Python 3
-- reportlab available via OS packages
-
-## Build
-
-lake build
-
-Expected: build completes successfully.
-
-## Run: dashboard and report
-
-Dashboard:
-./scripts/af dashboard <project> <view>
-
-Views:
-- help
-- reduction
-- analytic
-- all
-
-PDF report:
-./scripts/af report "<Title>" "/home/jsmar/axiom-forge/projects/<project>/report.pdf"
-
-Expected: a deterministic PDF is written.
-
-## License
-
-MIT License. See LICENSE.
-
