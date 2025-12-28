@@ -25,3 +25,11 @@ Entries (canonical):
    Reason: Analytic normal form not implemented (Phase 24 scaffold only).
    Evidence: rh_testing/tested/nyman_beurling/dashboard_artifact.txt
    Skeleton: rh_testing/skeletons/User_RH_NymanBeurlingSkeleton.lean
+
+Bucket Index (focus views; pointers only):
+- consequences_must_true:
+  - mertens_equivalence  -> rh_testing/tested/mertens_equivalence/
+- incompatibles_must_false:
+  (none)
+- questionable:
+  - nyman_beurling       -> rh_testing/tested/nyman_beurling/

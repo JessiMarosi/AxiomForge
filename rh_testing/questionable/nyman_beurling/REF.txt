@@ -1,0 +1,5 @@
+Canonical test record:
+rh_testing/tested/nyman_beurling/
+
+Interpretation for this bucket:
+Questionable/complex formulation bucket entry (functional-analytic equivalence).

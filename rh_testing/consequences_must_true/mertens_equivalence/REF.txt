@@ -1,0 +1,6 @@
+Canonical test record:
+rh_testing/tested/mertens_equivalence/
+
+Interpretation for this bucket:
+Treat as a consequence-style test: RH ⇒ Mertens/Möbius bound.
+(The canonical record may include both directions as an equivalence skeleton.)
