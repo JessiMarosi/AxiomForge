@@ -1,0 +1,6 @@
+User-mode skeleton:
+rh_testing/skeletons/User_RH_NymanBeurlingSkeleton.lean
+
+Description:
+Encodes RH ⇔ Nyman–Beurling criterion as an obligation skeleton
+with explicit functional-analytic / transform obligations.

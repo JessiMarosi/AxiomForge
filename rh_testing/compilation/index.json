@@ -2,8 +2,8 @@
   "generated_date": "2025-12-28",
   "policy": "deterministic, auditable, no speculation",
   "counts": {
-    "tested": 1,
-    "failed": 1,
+    "tested": 2,
+    "failed": 2,
     "passed": 0
   },
   "entries": [
@@ -14,8 +14,18 @@
       "failure_type": "Analytic infrastructure boundary",
       "failure_point": "MiniProver.Workbench.Analytic.toNormalForm",
       "reason": "Analytic normal form not implemented (Phase 24 scaffold only).",
-      "evidence": "projects/rh_testing/tested/mertens_equivalence/dashboard_artifact.txt",
+      "evidence": "rh_testing/tested/mertens_equivalence/dashboard_artifact.txt",
       "skeleton": "projects/rh_demo/User_RH_MertensSkeleton.lean"
+    },
+    {
+      "id": "nyman_beurling",
+      "claim": "RH ⇔ Nyman–Beurling criterion (functional-analytic approximation in L^2(0,1))",
+      "status": "FAILED",
+      "failure_type": "Analytic infrastructure boundary",
+      "failure_point": "MiniProver.Workbench.Analytic.toNormalForm",
+      "reason": "Analytic normal form not implemented (Phase 24 scaffold only).",
+      "evidence": "rh_testing/tested/nyman_beurling/dashboard_artifact.txt",
+      "skeleton": "rh_testing/skeletons/User_RH_NymanBeurlingSkeleton.lean"
     }
   ]
 }

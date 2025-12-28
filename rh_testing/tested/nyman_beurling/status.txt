@@ -1,0 +1,23 @@
+Claim:
+RH ⇔ Nyman–Beurling criterion (functional-analytic approximation in L^2(0,1))
+
+Status:
+FAILED
+
+Failure Type:
+Analytic infrastructure boundary
+
+Failure Point:
+MiniProver.Workbench.Analytic.toNormalForm
+
+Reason:
+Analytic normal form not implemented (Phase 24 scaffold only).
+
+Date Tested:
+2025-12-28
+
+Notes:
+- Obligation skeleton compiles and prints deterministically:
+  rh_testing/skeletons/User_RH_NymanBeurlingSkeleton.lean
+- Dashboard execution reached analytic layer and failed honestly.
+- No mathematical contradiction asserted.
