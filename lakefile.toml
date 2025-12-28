@@ -13,3 +13,11 @@ root = "Main"
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
 rev = "master"
+
+[[lean_exe]]
+name = "import_gate"
+root = "MiniProver.Tools.ImportGate"
+
+[[lean_exe]]
+name = "axiom_dashboard"
+root = "MiniProver.Tools.DashboardCli"

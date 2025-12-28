@@ -1,27 +1,22 @@
-# Lean / Lake build artifacts
+# Build artifacts
 .lake/
-build/
+.lake-env/
 *.olean
 *.ilean
 *.c
 *.o
+*.so
 
-# OS / editor noise
+# OS / editor junk
 .DS_Store
-Thumbs.db
 *.swp
-*.swo
-*~
+*.tmp
 
-# Logs and local notes (optional)
-*.log
+# Backups / tooling artifacts
+*.bak
+*.mdnngrep
 
-# Node artifacts (some mathlib deps may use npm tooling)
-node_modules/
-
-# Private keys / credentials (defense-in-depth)
-*.pem
-*.key
-*.crt
-*.p12
-.env
+# User-local projects (STRICTLY PRIVATE)
+projects/
+__pycache__/
+*.pyc

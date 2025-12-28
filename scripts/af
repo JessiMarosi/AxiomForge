@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PROJDIR="$ROOT/projects"
+
+sanitize() {
+  # Deterministic, locale-safe:
+  # keep only [A-Za-z0-9._+-] by mapping everything else to '_'
+  # (Do NOT use tr ranges like '_-+'; they can misbehave under collation.)
+  echo "$1" \
+    | sed 's/[^A-Za-z0-9._+-]/_/g' \
+    | sed 's/^_\+//; s/_\+$//'
+}
+
+usage() {
+  cat <<EOF
+Axiom Forge — project runner (deterministic session logging)
+
+Usage:
+  scripts/af init "<project name>"
+  scripts/af use "<project name>"
+  scripts/af log "<project name>" "<note>"
+  scripts/af run "<project name>" -- <command ...>
+  scripts/af dashboard "<project name>" [args...]
+  scripts/af policy "<project name>"
+  scripts/af report "<project name>" "<output.pdf>"
+
+Notes:
+- Logs are deterministic: step numbers only (no timestamps).
+- All files stay inside: $ROOT
+EOF
+}
+
+proj_path() {
+  local name="$1"
+  local id
+  id="$(sanitize "$name")"
+  echo "$PROJDIR/$id"
+}
+
+next_step() {
+  local logfile="$1"
+  if [[ ! -f "$logfile" ]]; then
+    echo 1
+    return
+  fi
+  local last
+  last="$(tail -n 1 "$logfile" | cut -d'|' -f1 || true)"
+  if [[ -z "${last:-}" ]]; then
+    echo 1
+  else
+    echo $((last + 1))
+  fi
+}
+
+append_log() {
+  local name="$1"
+  local msg="$2"
+  local p; p="$(proj_path "$name")"
+  local log="$p/steps.log"
+  mkdir -p "$p"
+  local n; n="$(next_step "$log")"
+  # Format: N|MESSAGE
+  printf "%s|%s\n" "$n" "$msg" >> "$log"
+}
+
+cmd_init() {
+  local name="${1:-}"
+  [[ -n "$name" ]] || { usage; exit 2; }
+  local p; p="$(proj_path "$name")"
+  mkdir -p "$p"
+  append_log "$name" "INIT project=\"$name\""
+  echo "OK: initialized project at $p"
+}
+
+cmd_use() {
+  local name="${1:-}"
+  [[ -n "$name" ]] || { usage; exit 2; }
+  local p; p="$(proj_path "$name")"
+  [[ -d "$p" ]] || { echo "No such project. Run: scripts/af init \"$name\""; exit 2; }
+  append_log "$name" "OPEN project=\"$name\""
+  echo "OK: opened project \"$name\""
+}
+
+cmd_log() {
+  local name="${1:-}"; shift || true
+  local note="${1:-}"
+  [[ -n "$name" && -n "$note" ]] || { usage; exit 2; }
+  append_log "$name" "NOTE $note"
+  echo "OK"
+}
+
+cmd_run() {
+  local name="${1:-}"; shift || true
+  [[ -n "$name" ]] || { usage; exit 2; }
+  [[ "${1:-}" == "--" ]] || { echo "Expected -- before command"; usage; exit 2; }
+  shift
+  [[ $# -ge 1 ]] || { usage; exit 2; }
+
+  append_log "$name" "RUN $*"
+  (cd "$ROOT" && "$@")
+  append_log "$name" "RESULT OK"
+}
+
+cmd_dashboard() {
+  local name="${1:-}"; shift || true
+  [[ -n "$name" ]] || { usage; exit 2; }
+
+  local p; p="$(proj_path "$name")"
+  local artifacts="$p/artifacts"
+  mkdir -p "$artifacts"
+
+  # Determine next artifact number deterministically from existing files.
+  local n=1
+  if ls "$artifacts"/dashboard_*.txt >/dev/null 2>&1; then
+    n="$(ls "$artifacts"/dashboard_*.txt | sed 's/.*dashboard_//; s/\.txt$//' | sort -n | tail -n 1)"
+    n="$((n + 1))"
+  fi
+
+  local out="$artifacts/dashboard_$(printf '%03d' "$n").txt"
+
+  append_log "$name" "DASHBOARD args=[$*] output_file=$(basename "$out")"
+
+  # Capture stdout deterministically (stderr still goes to terminal).
+  (cd "$ROOT" && lake exe axiom_dashboard "$@") | tee "$out" >/dev/null
+
+  append_log "$name" "RESULT OK"
+}
+
+cmd_policy() {
+  local name="${1:-}"
+  [[ -n "$name" ]] || { usage; exit 2; }
+  append_log "$name" "POLICY_CHECK ./scripts/policy_check.sh"
+  (cd "$ROOT" && ./scripts/policy_check.sh)
+  append_log "$name" "RESULT OK"
+}
+
+cmd_report() {
+  local name="${1:-}"; shift || true
+  local out="${1:-}"
+  [[ -n "$name" && -n "$out" ]] || { usage; exit 2; }
+  append_log "$name" "PRINT_REPORT output=\"$out\""
+  (cd "$ROOT" && python3 scripts/print_report.py --project "$name" --out "$out")
+  append_log "$name" "RESULT OK"
+  echo "OK: wrote $out"
+}
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  init)      cmd_init "$@" ;;
+  use)       cmd_use "$@" ;;
+  log)       cmd_log "$@" ;;
+  run)       cmd_run "$@" ;;
+  dashboard) cmd_dashboard "$@" ;;
+  policy)    cmd_policy "$@" ;;
+  report)    cmd_report "$@" ;;
+  ""|help|-h|--help) usage ;;
+  *) echo "Unknown command: $cmd"; usage; exit 2 ;;
+esac

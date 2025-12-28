@@ -4,9 +4,11 @@ namespace MiniProver
 
 /-!
 Axiom Forge — Sandbox
-
-Calibration proofs only.
 -/
+
+-- Phase 1 search calibration
+#check Even
+#check Nat.even_add
 
 /-- Natural numbers calibration: 0 < 1. -/
 example : (0 : Nat) < 1 := by
