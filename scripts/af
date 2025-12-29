@@ -115,7 +115,7 @@ cmd_dashboard() {
   local n=1
   if ls "$artifacts"/dashboard_*.txt >/dev/null 2>&1; then
     n="$(ls "$artifacts"/dashboard_*.txt | sed 's/.*dashboard_//; s/\.txt$//' | sort -n | tail -n 1)"
-    n="$((n + 1))"
+      n="$((10#$n + 1))"
   fi
 
   local out="$artifacts/dashboard_$(printf '%03d' "$n").txt"
