@@ -23,3 +23,6 @@ __pycache__/
 
 # accidental CLI redirect artifacts
 analytic: *
+
+# RH demo artifacts
+rh_testing/compilation/history/
