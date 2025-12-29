@@ -68,7 +68,7 @@ def renderReduction (step : ReductionStep) : String :=
 
 def renderAnalytic (f : Formulation) : String :=
   match Analytic.toNormalForm f with
-  | .ok _    => "analytic: OK (unexpected in scaffold)"
+  | .ok nf   => "analytic: OK\n\n" ++ nf.tag
   | .error e => "analytic: ERROR\n\n" ++ renderFailure e
 
 end Dashboard
