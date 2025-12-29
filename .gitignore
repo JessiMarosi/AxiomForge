@@ -26,3 +26,9 @@ analytic: *
 
 # RH demo artifacts
 rh_testing/compilation/history/
+
+# RH demo artifacts
+rh_testing/compilation/history/
+
+# accidental CLI redirect artifacts
+analytic: *
