@@ -20,3 +20,6 @@
 projects/
 __pycache__/
 *.pyc
+
+# accidental CLI redirect artifacts
+analytic: *
