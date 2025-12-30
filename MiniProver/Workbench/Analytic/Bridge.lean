@@ -36,6 +36,17 @@ def bridgeFor : String → Option BridgeSpec
         ]
       }
 
+  | "nyman_beurling" =>
+      some {
+        formulationId := "nyman_beurling"
+        obligations := [
+          { key := "def_nb_space", desc := "Declare the Nyman–Beurling function space / closure statement being used, shape-only." },
+          { key := "bridge_to_zeta", desc := "Declare the bridge from the closure criterion to ζ(s) nonvanishing / RH, shape-only." },
+          { key := "approx_family", desc := "Name the approximation family (e.g., fractional part functions) and required closure obligations." },
+          { key := "norm_topology", desc := "Declare the norm/topology and any measure-theory obligations introduced by the criterion." }
+        ]
+      }
+
   | _ => none
 
 end MiniProver.Workbench.Analytic
