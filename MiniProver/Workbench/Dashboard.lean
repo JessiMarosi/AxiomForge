@@ -13,8 +13,9 @@ import MiniProver.Workbench.Skeleton
 import MiniProver.Workbench.Reduction
 import MiniProver.Workbench.Analytic
 
-namespace MiniProver.Workbench
+noncomputable section
 
+namespace MiniProver.Workbench
 namespace Dashboard
 
 def renderFailureKind : FailureKind → String
