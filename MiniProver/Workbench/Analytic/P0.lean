@@ -21,7 +21,15 @@ If an ID is missing here, the analytic layer should fail with a clear error.
 -/
 def p0For (form : Formulation) : Option P0BigO :=
   if form.id == "pnt_error_chebyshev_psi" then
+    -- PNT / Chebyshev ψ(x) error term shape (demo baseline)
     some { fName := "0", gName := "0", hName := "sqrt(x) * (log x)^2" }
+  else if form.id == "mertens_equivalence" then
+    -- Mertens route (P0 only): target *shape* for the summatory Möbius bound.
+    -- We are NOT proving it, only declaring the intended Big-O family.
+    --
+    -- Conventional statement (informal): M(x) = O(x^(1/2+ε)) for all ε>0
+    -- We keep ε symbolic at v0: "x^(1/2+ε)".
+    some { fName := "M(x)", gName := "0", hName := "x^(1/2+ε)" }
   else
     none
 

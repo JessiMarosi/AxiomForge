@@ -3,6 +3,7 @@ import MiniProver.Workbench.Assumptions
 import MiniProver.Workbench.Skeleton
 import MiniProver.Workbench.Failure
 import MiniProver.Workbench.Analytic.P0
+import MiniProver.Workbench.Analytic.Bridge
 
 namespace MiniProver.Workbench
 
@@ -22,7 +23,6 @@ namespace Analytic
 Analytic normalization layer (v0).
 
 This layer normalizes a formulation using explicitly provided structured P0 inputs.
-
 Rules:
 - No Prop / Expr inspection
 - No heuristics
@@ -43,10 +43,20 @@ def toNormalForm (f : Formulation) : Except Failure AnalyticNormalForm :=
         context := some "MiniProver.Workbench.Analytic.toNormalForm"
       }
   | some p0 =>
-      let tag :=
-        "NF_BigO(Real): ∃C>0 ∃x0>0 ∀x≥x0, |" ++ p0.fName ++ " - " ++ p0.gName ++
-        "| ≤ C*(" ++ p0.hName ++ ")"
-      Except.ok (AnalyticNormalForm.mk tag)
+      -- P0+ gate: require a declared BridgeSpec (obligation checklist) once P0 exists.
+      match MiniProver.Workbench.Analytic.bridgeFor f.id with
+      | none =>
+          Except.error {
+            kind := FailureKind.internalInvariant
+            message :=
+              s!"RH-A v0: missing BridgeSpec (P0+ obligations) for formulation ID {f.id} (add it to Analytic.bridgeFor)"
+            context := some "MiniProver.Workbench.Analytic.toNormalForm"
+          }
+      | some _spec =>
+          let tag :=
+            "NF_BigO(Real): ∃C>0 ∃x0>0 ∀x≥x0, |" ++ p0.fName ++ " - " ++ p0.gName ++
+            "| ≤ C*(" ++ p0.hName ++ ")"
+          Except.ok (AnalyticNormalForm.mk tag)
 
 end Analytic
 end MiniProver.Workbench
