@@ -24,6 +24,18 @@ def bridgeFor : String → Option BridgeSpec
           { key := "error_terms", desc := "List all error-term obligations introduced by the route." }
         ]
       }
+
+  | "pnt_error_chebyshev_psi" =>
+      some {
+        formulationId := "pnt_error_chebyshev_psi"
+        obligations := [
+          { key := "def_psi", desc := "Declare Chebyshev ψ(x) and Λ(n) with cutoff conventions." },
+          { key := "route_explicit_formula", desc := "Declare explicit-formula-style route tying ψ(x)-x to ζ zeros, shape-only." },
+          { key := "smoothing_truncation", desc := "List smoothing/truncation obligations and named error terms introduced." },
+          { key := "bound_goal", desc := "Declare the target error bound family: O( sqrt(x) * (log x)^2 )." }
+        ]
+      }
+
   | _ => none
 
 end MiniProver.Workbench.Analytic
