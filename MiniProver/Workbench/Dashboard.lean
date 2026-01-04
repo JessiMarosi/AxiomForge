@@ -12,6 +12,7 @@ import MiniProver.Workbench.Assumptions
 import MiniProver.Workbench.Skeleton
 import MiniProver.Workbench.Reduction
 import MiniProver.Workbench.Analytic
+import MiniProver.Workbench.Analytic.Bridge
 
 noncomputable section
 
@@ -68,9 +69,21 @@ def renderReduction (step : ReductionStep) : String :=
   s!"ReductionStep: {step.name}\n{v}\n\n{c}"
 
 def renderAnalytic (f : Formulation) : String :=
+  let p1Line : String :=
+    match Analytic.bridgeFor f.id with
+    | none => ""
+    | some bs =>
+        let declared := bs.obligations.length
+        let stubbedNames := bs.obligations.filter (fun o => o.hasStub) |>
+          List.map (fun o => o.name)
+        let stubbed := stubbedNames.length
+        let stubLine :=
+          if stubbed == 0 then "" else
+            "Stubbed: " ++ String.intercalate ", " stubbedNames ++ "\n\n"
+        s!"P1 obligations: declared={declared}, stubbed={stubbed}\n" ++ stubLine
   match Analytic.toNormalForm f with
-  | .ok nf   => "analytic: OK\n\n" ++ nf.tag
-  | .error e => "analytic: ERROR\n\n" ++ renderFailure e
+  | .ok nf   => "analytic: OK\n" ++ p1Line ++ nf.tag
+  | .error e => "analytic: ERROR\n" ++ p1Line ++ "\n" ++ renderFailure e
 
 end Dashboard
 end MiniProver.Workbench
