@@ -13,8 +13,9 @@ We declare stable theorem *targets* as axioms so:
 -/
 
 /-- Target: the Robin inequality statement (as a checked Prop). -/
-axiom robin_inequality_statement :
-  RobinIneq
+theorem robin_inequality_statement :
+  RobinIneq := by
+  sorry
 
 /-- Target: RH implies Robin inequality (proof deferred). -/
 theorem robin_RH_implies_robin :
