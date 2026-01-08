@@ -1,9 +1,13 @@
+import MiniProver.Workbench.Analytic.RobinBridge
 import MiniProver.Workbench.Formulation
 import MiniProver.Workbench.Assumptions
 import MiniProver.Workbench.Skeleton
 import MiniProver.Workbench.Failure
 import MiniProver.Workbench.Analytic.P0
 import MiniProver.Workbench.Analytic.Bridge
+import MiniProver.Workbench.Analytic.Mertens
+import MiniProver.Workbench.Analytic.Robin
+
 
 namespace MiniProver.Workbench
 
@@ -60,3 +64,4 @@ def toNormalForm (f : Formulation) : Except Failure AnalyticNormalForm :=
 
 end Analytic
 end MiniProver.Workbench
+

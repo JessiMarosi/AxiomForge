@@ -74,6 +74,26 @@ def bridgeFor : String → Option BridgeSpec
         ]
       }
 
+
+  | "robin_inequality" =>
+      some {
+        formulationId := "robin_inequality"
+        obligations := [
+          { name := q "robin_inequality" "def_sigma",
+            description := "Declare σ(n) (sum of divisors) with domain conventions and notation.",
+            hasStub := HasStub (q "robin_inequality" "def_sigma") },
+          { name := q "robin_inequality" "def_gamma_const",
+            description := "Declare Euler–Mascheroni γ and constants used in e^γ n log log n, shape-only.",
+            hasStub := HasStub (q "robin_inequality" "def_gamma_const") },
+          { name := q "robin_inequality" "bridge_to_zeta",
+            description := "Declare the equivalence bridge: Robin’s inequality ↔ RH, naming the route and required ζ(s) facts, shape-only.",
+            hasStub := HasStub (q "robin_inequality" "bridge_to_zeta") },
+          { name := q "robin_inequality" "threshold_5041",
+            description := "Declare the threshold obligation n ≥ 5041 and handling of finite exceptions, shape-only.",
+            hasStub := HasStub (q "robin_inequality" "threshold_5041") }
+        ]
+      }
+
   | _ => none
 
 end MiniProver.Workbench.Analytic

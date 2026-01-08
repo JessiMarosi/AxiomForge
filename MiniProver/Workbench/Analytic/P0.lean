@@ -29,6 +29,8 @@ def p0For (form : Formulation) : Option P0BigO :=
     -- Conventional statement (informal): M(x) = O(x^(1/2+ε)) for all ε>0
     -- We keep ε symbolic at v0: "x^(1/2+ε)".
     some { fName := "M(x)", gName := "0", hName := "x^(1/2+ε)" }
+  else if form.id == "robin_inequality" then
+    some { fName := "σ(n)", gName := "e^γ * n * log(log n)", hName := "0" }
   else if form.id == "nyman_beurling" then
     -- Nyman–Beurling route (P0 only): placeholder Big-O shape for analytic burden.
     -- Goal here is classification (move bottleneck to BridgeSpec), not proof.

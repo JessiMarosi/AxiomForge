@@ -44,6 +44,7 @@ We only inspect `id` at RH-A.5A; `stmt` is opaque for now.
 def rhDemoFormulations : List Formulation :=
   [ Formulation.ofStmt "mertens_equivalence" True
   , Formulation.ofStmt "nyman_beurling" True
+  , Formulation.ofStmt "robin_inequality" True
   , Formulation.ofStmt "pnt_error_chebyshev_psi" True
   ]
 
