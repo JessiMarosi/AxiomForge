@@ -23,7 +23,8 @@ theorem robin_RH_implies_robin :
   sorry
 
 /-- Target: Robin inequality implies RH (proof deferred). -/
-axiom robin_robin_implies_RH :
-  RobinIneq → RH
+theorem robin_robin_implies_RH :
+  RobinIneq → RH := by
+  sorry
 
 end MiniProver.Workbench.Analytic
