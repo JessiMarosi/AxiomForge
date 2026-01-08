@@ -17,8 +17,9 @@ axiom robin_inequality_statement :
   RobinIneq
 
 /-- Target: RH implies Robin inequality (proof deferred). -/
-axiom robin_RH_implies_robin :
-  RH → RobinIneq
+theorem robin_RH_implies_robin :
+  RH → RobinIneq := by
+  sorry
 
 /-- Target: Robin inequality implies RH (proof deferred). -/
 axiom robin_robin_implies_RH :
