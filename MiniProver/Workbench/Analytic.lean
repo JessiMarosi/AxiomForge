@@ -7,6 +7,7 @@ import MiniProver.Workbench.Analytic.P0
 import MiniProver.Workbench.Analytic.Bridge
 import MiniProver.Workbench.Analytic.Mertens
 import MiniProver.Workbench.Analytic.Robin
+import MiniProver.Workbench.Analytic.Scaffold
 
 
 namespace MiniProver.Workbench
