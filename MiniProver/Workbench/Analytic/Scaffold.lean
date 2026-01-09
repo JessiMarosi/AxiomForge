@@ -33,46 +33,40 @@ No analytic content is introduced here. This is definitional structure only.
 def RobinDomain (n : Nat) : Prop :=
   robinThreshold n
 
-/-- Canonical right-hand side of the Robin inequality (normalized association). -/
+/--
+Canonical right-hand side of the Robin inequality.
+
+IMPORTANT: This is definitionally aligned with `RobinBridge.lean`:
+`Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))`.
+-/
 def RobinRHS (n : Nat) : Real :=
-  Real.exp eulerGamma * ((n : Real) * Real.log (Real.log (n : Real)))
+  Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))
 
 /-- Pointwise Robin inequality at `n`. -/
 def RobinIneqAt (n : Nat) : Prop :=
   (robinSigma n : Real) ≤ RobinRHS n
 
-/--
-Decomposed view of `RobinIneq`.
-
-NOTE: This is *not* `rfl` unless `RobinIneq` is definitionally equal to the RHS.
-We keep this as explicit proof debt until we align it with the true definition
-of `RobinIneq` from `RobinBridge`.
--/
+/-- Decomposed view of `RobinIneq` (definitional after alignment). -/
 lemma robinIneq_decomposed :
   RobinIneq ↔
     (∀ n : Nat,
       RobinDomain n →
         RobinIneqAt n) := by
-  sorry
+  rfl
 
 /-- Target: the Robin inequality statement (as a checked Prop). -/
 theorem robin_inequality_statement :
   RobinIneq := by
   sorry
 
-/--
-Unfold `RobinIneq` into a concrete inequality statement.
-
-NOTE: This is proof debt until the exact definitional shape of `RobinIneq`
-is reconciled with `RobinRHS`.
--/
+/-- Unfold `RobinIneq` into its concrete inequality statement (definitional after alignment). -/
 lemma robinIneq_unfold :
   RobinIneq ↔
     (∀ n : Nat,
       robinThreshold n →
         (robinSigma n : Real) ≤
           RobinRHS n) := by
-  sorry
+  rfl
 
 /-
 Phase 17.6 — Wire the “standard RH consequence” to a name-stable formulation Prop.
@@ -152,7 +146,6 @@ theorem robin_RH_implies_sigma_bound :
 theorem robin_RH_implies_robin :
   RH → RobinIneq := by
   intro hRH
-  -- Keep using the explicit unfold lemma as the stable interface.
   exact (robinIneq_unfold).2 (robin_RH_implies_sigma_bound hRH)
 
 /-- Target: Robin inequality implies RH (proof deferred). -/
