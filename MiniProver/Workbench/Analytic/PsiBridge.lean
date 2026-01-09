@@ -14,8 +14,8 @@ Bridge obligations declared in Bridge.lean:
   - pnt_error_chebyshev_psi.smoothing_truncation
   - pnt_error_chebyshev_psi.bound_goal
 
-Phase 17.9 goal:
-Create name-stable Lean *targets* for each obligation above, in one place.
+Phase 17.10 goal:
+Upgrade obligation targets from raw `True` to structured, audit-grade shape-only Props.
 
 IMPORTANT:
 - No ψ(x) development
@@ -66,38 +66,56 @@ def PsiErrorBound : Prop :=
   ∃ nf : NormalForm, nf = PsiErrorNF
 
 --------------------------------------------------------------------------------
--- Phase 17.9: Bridge obligation targets (shape-only Props)
+-- Phase 17.10: Structured obligation specs (audit payload objects)
 --------------------------------------------------------------------------------
 
-/-
-Each target below corresponds 1:1 to the obligation names in Bridge.lean.
+/-- Spec for obligation: pnt_error_chebyshev_psi.def_psi -/
+structure PsiDefinitionSpec where
+  psiName        : String   -- e.g. "ψ"
+  vonMangoldt    : String   -- e.g. "Λ"
+  cutoffRule     : String   -- e.g. "sum_{n≤x}"
+  domainChoice   : String   -- e.g. "Nat/Real coercions"
+  notes          : String
+deriving Repr, DecidableEq
 
-We intentionally define them as Props (targets), not as proofs.
-Later phases will replace these with concrete statements (and then proofs).
--/
+/-- Spec for obligation: pnt_error_chebyshev_psi.route_explicit_formula -/
+structure ExplicitFormulaRouteSpec where
+  routeName      : String   -- e.g. "explicit_formula_style"
+  usesZeros      : Bool     -- whether the route references ζ zeros (shape-only)
+  smoothingStyle : String   -- e.g. "smoothed" / "unsmoothed"
+  truncationNote : String
+  notes          : String
+deriving Repr, DecidableEq
+
+/-- Spec for obligation: pnt_error_chebyshev_psi.smoothing_truncation -/
+structure SmoothingTruncationSpec where
+  smoothingTerms  : List String  -- names of smoothing terms introduced
+  truncationTerms : List String  -- names of truncation terms introduced
+  errorTerms      : List String  -- named error terms to be bounded later
+  notes           : String
+deriving Repr, DecidableEq
+
+--------------------------------------------------------------------------------
+-- Phase 17.10: Bridge obligation targets (structured shape-only Props)
+--------------------------------------------------------------------------------
 
 /-- Target for obligation: pnt_error_chebyshev_psi.def_psi -/
 def Obl_pnt_def_psi : Prop :=
-  True
+  ∃ _spec : PsiDefinitionSpec, True
 
 /-- Target for obligation: pnt_error_chebyshev_psi.route_explicit_formula -/
 def Obl_pnt_route_explicit_formula : Prop :=
-  True
+  ∃ _spec : ExplicitFormulaRouteSpec, True
 
 /-- Target for obligation: pnt_error_chebyshev_psi.smoothing_truncation -/
 def Obl_pnt_smoothing_truncation : Prop :=
-  True
+  ∃ _spec : SmoothingTruncationSpec, True
 
 /-- Target for obligation: pnt_error_chebyshev_psi.bound_goal -/
 def Obl_pnt_bound_goal : Prop :=
   PsiErrorBound
 
-/-
-Optional helper: deterministic resolver from Bridge obligation-name strings
-to the corresponding target Prop.
-
-This is wiring-only; nothing uses it yet unless you choose to in a later phase.
--/
+/-- Deterministic resolver from Bridge obligation-name strings to target Props. -/
 def psiObligationTarget (name : String) : Option Prop :=
   if name == "pnt_error_chebyshev_psi.def_psi" then
     some Obl_pnt_def_psi
