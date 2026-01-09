@@ -100,7 +100,9 @@ def bridgeFor : String → Option BridgeSpec
             description := "Declare the threshold obligation n ≥ 5041 and handling of finite exceptions, shape-only.",
             hasStub := HasStub (q "robin_inequality" "threshold_5041") }
         ]
-        -- assumptions defaults to empty
+        assumptions :=
+          AssumptionLedger.add AssumptionLedger.empty AssumptionTag.bridgeAxiom
+            "Robin ↔ RH bridge is declarative placeholder; not a proof."
       }
 
   | _ => none
