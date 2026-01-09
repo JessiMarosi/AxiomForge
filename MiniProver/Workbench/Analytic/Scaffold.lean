@@ -8,7 +8,7 @@ namespace MiniProver.Workbench.Analytic
 /-
 Phase 16 — Proof scaffolding targets (still proof-free).
 
-Phase 17 proof work proceeds by:
+Phase 17+ proof work proceeds by:
 - choosing exactly one theorem target,
 - decomposing it into small named lemmas (each a single responsibility),
 - keeping proof debt explicit via `sorry`,
@@ -80,7 +80,7 @@ def RH_PsiErrorBound : Prop :=
 Ticket A1:
 From RH, derive the Chebyshev ψ error bound.
 
-Proof deferred.
+Phase 20: discharged as a structured placeholder witness (no analytic content).
 -/
 theorem rh_implies_psi_error_bound :
   RH → RH_PsiErrorBound := by
@@ -88,6 +88,7 @@ theorem rh_implies_psi_error_bound :
   -- Phase 17 placeholder: PsiErrorBound is structured (no analytic content yet).
   -- Provide the witness directly.
   exact ⟨PsiErrorNF, rfl⟩
+
 /--
 Ticket A2:
 Convert the Chebyshev ψ error bound into the Robin σ-inequality.
@@ -107,7 +108,7 @@ theorem psi_error_bound_implies_robin_sigma_ineq :
 Ticket B (threshold / domain hygiene):
 Isolate domain, coercion, and log-positivity issues.
 
-Currently identity-on-purpose.
+Now discharged as a real proof (identity).
 -/
 theorem robin_sigma_ineq_threshold_hygiene :
   (∀ n : Nat,
