@@ -1,12 +1,18 @@
 import MiniProver.Workbench.Analytic.P0
 import MiniProver.Workbench.Analytic.P1
 import MiniProver.Workbench.Analytic.Stubs
+import MiniProver.Workbench.Analytic.Assumptions
 
 namespace MiniProver.Workbench.Analytic
 
 structure BridgeSpec where
   formulationId : String
   obligations   : List P1Obligation
+  /-
+  Assumption ledger (v1): audit-grade bookkeeping only.
+  Default is empty to preserve existing behavior.
+  -/
+  assumptions   : AssumptionLedger := AssumptionLedger.empty
 deriving Repr, DecidableEq
 
 /-- Helper: qualify an obligation name to avoid collisions across formulations. -/
@@ -32,6 +38,7 @@ def bridgeFor : String → Option BridgeSpec
             description := "List all error-term obligations introduced by the route.",
             hasStub := HasStub (q fid "error_terms") }
         ]
+        -- assumptions defaults to empty
       }
 
   | "pnt_error_chebyshev_psi" =>
@@ -52,6 +59,7 @@ def bridgeFor : String → Option BridgeSpec
             description := "Declare the target error bound family: O( sqrt(x) * (log x)^2 ).",
             hasStub := HasStub (q fid "bound_goal") }
         ]
+        -- assumptions defaults to empty
       }
 
   | "nyman_beurling" =>
@@ -72,8 +80,8 @@ def bridgeFor : String → Option BridgeSpec
             description := "Declare the norm/topology and any measure-theory obligations introduced by the criterion.",
             hasStub := HasStub (q fid "norm_topology") }
         ]
+        -- assumptions defaults to empty
       }
-
 
   | "robin_inequality" =>
       some {
@@ -92,6 +100,7 @@ def bridgeFor : String → Option BridgeSpec
             description := "Declare the threshold obligation n ≥ 5041 and handling of finite exceptions, shape-only.",
             hasStub := HasStub (q "robin_inequality" "threshold_5041") }
         ]
+        -- assumptions defaults to empty
       }
 
   | _ => none
