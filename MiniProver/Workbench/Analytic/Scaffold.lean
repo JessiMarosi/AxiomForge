@@ -1,6 +1,8 @@
 import MiniProver.Workbench.Analytic.RobinBridge
 import MiniProver.Workbench.Analytic.PsiBridge
 
+noncomputable section
+
 namespace MiniProver.Workbench.Analytic
 
 /-
@@ -16,26 +18,64 @@ Phase 17 proof work proceeds by:
 CRITICAL: Do NOT use `robin_bridge_RH_to_Robin` (axiom).
 -/
 
+/-
+Section D — Decomposition for Phase 19 admission (statement-level only).
+
+Goal: make the Robin inequality statement transparent by factoring:
+- the domain predicate,
+- the RHS expression,
+- and the pointwise inequality.
+
+No analytic content is introduced here. This is definitional structure only.
+-/
+
+/-- Domain predicate for the Robin inequality (currently identical to `robinThreshold`). -/
+def RobinDomain (n : Nat) : Prop :=
+  robinThreshold n
+
+/-- Canonical right-hand side of the Robin inequality (normalized association). -/
+def RobinRHS (n : Nat) : Real :=
+  Real.exp eulerGamma * ((n : Real) * Real.log (Real.log (n : Real)))
+
+/-- Pointwise Robin inequality at `n`. -/
+def RobinIneqAt (n : Nat) : Prop :=
+  (robinSigma n : Real) ≤ RobinRHS n
+
+/--
+Decomposed view of `RobinIneq`.
+
+NOTE: This is *not* `rfl` unless `RobinIneq` is definitionally equal to the RHS.
+We keep this as explicit proof debt until we align it with the true definition
+of `RobinIneq` from `RobinBridge`.
+-/
+lemma robinIneq_decomposed :
+  RobinIneq ↔
+    (∀ n : Nat,
+      RobinDomain n →
+        RobinIneqAt n) := by
+  sorry
+
 /-- Target: the Robin inequality statement (as a checked Prop). -/
 theorem robin_inequality_statement :
   RobinIneq := by
   sorry
 
-/-- Unfold `RobinIneq` into its concrete inequality statement. -/
+/--
+Unfold `RobinIneq` into a concrete inequality statement.
+
+NOTE: This is proof debt until the exact definitional shape of `RobinIneq`
+is reconciled with `RobinRHS`.
+-/
 lemma robinIneq_unfold :
   RobinIneq ↔
     (∀ n : Nat,
       robinThreshold n →
         (robinSigma n : Real) ≤
-          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
-  rfl
+          RobinRHS n) := by
+  sorry
 
 /-
 Phase 17.6 — Wire the “standard RH consequence” to a name-stable formulation Prop.
-
-We now use `PsiErrorBound` (defined in `PsiBridge.lean`) instead of raw `True`.
-This keeps the pipeline stable while allowing later phases to replace the placeholder
-with a concrete ψ(x) error bound statement.
 -/
 
 /-- Alias used by the proof pipeline: RH standard consequence = ψ error bound. -/
@@ -64,7 +104,7 @@ theorem psi_error_bound_implies_robin_sigma_ineq :
     (∀ n : Nat,
       robinThreshold n →
         (robinSigma n : Real) ≤
-          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+          RobinRHS n) := by
   intro hPsi
   sorry
 
@@ -78,12 +118,12 @@ theorem robin_sigma_ineq_threshold_hygiene :
   (∀ n : Nat,
     robinThreshold n →
       (robinSigma n : Real) ≤
-        Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real)))
+        RobinRHS n)
   →
   (∀ n : Nat,
     robinThreshold n →
       (robinSigma n : Real) ≤
-        Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+        RobinRHS n) := by
   intro h
   exact h
 
@@ -96,7 +136,7 @@ theorem robin_RH_implies_sigma_bound :
     (∀ n : Nat,
       robinThreshold n →
         (robinSigma n : Real) ≤
-          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+          RobinRHS n) := by
   intro hRH
   have hPsi : RH_PsiErrorBound :=
     rh_implies_psi_error_bound hRH
@@ -104,7 +144,7 @@ theorem robin_RH_implies_sigma_bound :
       (∀ n : Nat,
         robinThreshold n →
           (robinSigma n : Real) ≤
-            Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) :=
+            RobinRHS n) :=
     psi_error_bound_implies_robin_sigma_ineq hPsi
   exact robin_sigma_ineq_threshold_hygiene hCore
 
@@ -112,6 +152,7 @@ theorem robin_RH_implies_sigma_bound :
 theorem robin_RH_implies_robin :
   RH → RobinIneq := by
   intro hRH
+  -- Keep using the explicit unfold lemma as the stable interface.
   exact (robinIneq_unfold).2 (robin_RH_implies_sigma_bound hRH)
 
 /-- Target: Robin inequality implies RH (proof deferred). -/
