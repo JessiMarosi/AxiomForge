@@ -77,10 +77,18 @@ def renderAnalytic (f : Formulation) : String :=
         let stubbedNames := bs.obligations.filter (fun o => o.hasStub) |>
           List.map (fun o => o.name)
         let stubbed := stubbedNames.length
+        let assumptionsLine :=
+          if bs.assumptions.entries.isEmpty then
+            "Assumptions: (none)\n"
+          else
+            "Assumptions:\n" ++
+              MiniProver.Workbench.Analytic.AssumptionLedger.render bs.assumptions ++ "\n"
         let stubLine :=
           if stubbed == 0 then "" else
             "Stubbed: " ++ String.intercalate ", " stubbedNames ++ "\n\n"
-        s!"P1 obligations: declared={declared}, stubbed={stubbed}\n" ++ stubLine
+        s!"P1 obligations: declared={declared}, stubbed={stubbed}\n" ++
+          assumptionsLine ++
+          stubLine
   match Analytic.toNormalForm f with
   | .ok nf   => "analytic: OK\n" ++ p1Line ++ nf.tag
   | .error e => "analytic: ERROR\n" ++ p1Line ++ "\n" ++ renderFailure e
