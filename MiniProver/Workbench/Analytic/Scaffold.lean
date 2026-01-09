@@ -1,15 +1,19 @@
-import MiniProver.Workbench.Analytic.Robin
 import MiniProver.Workbench.Analytic.RobinBridge
+import MiniProver.Workbench.Analytic.PsiBridge
 
 namespace MiniProver.Workbench.Analytic
 
 /-
 Phase 16 — Proof scaffolding targets (still proof-free).
 
-We declare stable theorem *targets* as axioms so:
-- names exist
-- types are checked
-- future phases can replace these with real theorems/proofs
+Phase 17 proof work proceeds by:
+- choosing exactly one theorem target,
+- decomposing it into small named lemmas (each a single responsibility),
+- keeping proof debt explicit via `sorry`,
+- introducing NO hidden assumptions,
+- and NOT using bridge axioms to "prove" anything.
+
+CRITICAL: Do NOT use `robin_bridge_RH_to_Robin` (axiom).
 -/
 
 /-- Target: the Robin inequality statement (as a checked Prop). -/
@@ -17,10 +21,98 @@ theorem robin_inequality_statement :
   RobinIneq := by
   sorry
 
-/-- Target: RH implies Robin inequality (proof deferred). -/
+/-- Unfold `RobinIneq` into its concrete inequality statement. -/
+lemma robinIneq_unfold :
+  RobinIneq ↔
+    (∀ n : Nat,
+      robinThreshold n →
+        (robinSigma n : Real) ≤
+          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+  rfl
+
+/-
+Phase 17.6 — Wire the “standard RH consequence” to a name-stable formulation Prop.
+
+We now use `PsiErrorBound` (defined in `PsiBridge.lean`) instead of raw `True`.
+This keeps the pipeline stable while allowing later phases to replace the placeholder
+with a concrete ψ(x) error bound statement.
+-/
+
+/-- Alias used by the proof pipeline: RH standard consequence = ψ error bound. -/
+def RH_PsiErrorBound : Prop :=
+  PsiErrorBound
+
+/--
+Ticket A1:
+From RH, derive the Chebyshev ψ error bound.
+
+Proof deferred.
+-/
+theorem rh_implies_psi_error_bound :
+  RH → RH_PsiErrorBound := by
+  intro hRH
+  sorry
+
+/--
+Ticket A2:
+Convert the Chebyshev ψ error bound into the Robin σ-inequality.
+
+Proof deferred.
+-/
+theorem psi_error_bound_implies_robin_sigma_ineq :
+  RH_PsiErrorBound →
+    (∀ n : Nat,
+      robinThreshold n →
+        (robinSigma n : Real) ≤
+          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+  intro hPsi
+  sorry
+
+/--
+Ticket B (threshold / domain hygiene):
+Isolate domain, coercion, and log-positivity issues.
+
+Currently identity-on-purpose.
+-/
+theorem robin_sigma_ineq_threshold_hygiene :
+  (∀ n : Nat,
+    robinThreshold n →
+      (robinSigma n : Real) ≤
+        Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real)))
+  →
+  (∀ n : Nat,
+    robinThreshold n →
+      (robinSigma n : Real) ≤
+        Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+  intro h
+  exact h
+
+/--
+Root proof debt (glue only):
+RH → ψ-error-bound → Robin σ-inequality → hygiene.
+-/
+theorem robin_RH_implies_sigma_bound :
+  RH →
+    (∀ n : Nat,
+      robinThreshold n →
+        (robinSigma n : Real) ≤
+          Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) := by
+  intro hRH
+  have hPsi : RH_PsiErrorBound :=
+    rh_implies_psi_error_bound hRH
+  have hCore :
+      (∀ n : Nat,
+        robinThreshold n →
+          (robinSigma n : Real) ≤
+            Real.exp eulerGamma * (n : Real) * Real.log (Real.log (n : Real))) :=
+    psi_error_bound_implies_robin_sigma_ineq hPsi
+  exact robin_sigma_ineq_threshold_hygiene hCore
+
+/-- Target: RH implies Robin inequality (structured; proof debt isolated above). -/
 theorem robin_RH_implies_robin :
   RH → RobinIneq := by
-  sorry
+  intro hRH
+  exact (robinIneq_unfold).2 (robin_RH_implies_sigma_bound hRH)
 
 /-- Target: Robin inequality implies RH (proof deferred). -/
 theorem robin_robin_implies_RH :
